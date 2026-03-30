@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home Finance Management{% endblock %}</title>
+    <!-- Modern Typeface -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="dark-theme">
+    <div id="app-container" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i data-feather="monitor"></i>
+                <h2>FinTracker</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/dashboard" id="nav-dashboard"><i data-feather="grid"></i> Dashboard</a></li>
+                <li><a href="/expenses" id="nav-expenses"><i data-feather="dollar-sign"></i> Expenses</a></li>
+                <li><a href="/budget" id="nav-budget"><i data-feather="pie-chart"></i> Budgets</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-outline"><i data-feather="log-out"></i> Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div>
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p class="subtitle" id="user-greeting">Welcome back, User</p>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar"><i data-feather="user"></i></div>
+                </div>
+            </header>
+
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Generic Error/Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script>
+        // Init feather icons
+        feather.replace();
+    </script>
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // Check Auth Status early
+        const token = localStorage.getItem('jwtToken');
+        const currentPath = window.location.pathname;
+        const publicPaths = ['/', '/login', '/signup', '/register'];
+        
+        if (!token && !publicPaths.includes(currentPath)) {
+            window.location.href = '/login';
+        } else {
+            // Unhide app block
+            const appBlock = document.getElementById('app-container');
+            if (appBlock && !publicPaths.includes(currentPath)) {
+                appBlock.style.display = 'flex';
+                // Activate link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    if (link.href.includes(currentPath)) link.classList.add('active');
+                });
+                
+                // Set name
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (user) document.getElementById('user-greeting').innerText = `Welcome back, ${user.name}`;
+            }
+        }
+        
+        // Logout handler
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FinTracker{% endblock %}
+{% block page_title %}Overview{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <!-- Top KPI Cards -->
+    <div class="kpi-cards">
+        <div class="card glass-panel kpi-card">
+            <div class="kpi-icon"><i data-feather="dollar-sign"></i></div>
+            <div class="kpi-content">
+                <h3>Total Income</h3>
+                <p id="kpi-income" class="amount">$0.00</p>
+            </div>
+        </div>
+        <div class="card glass-panel kpi-card">
+            <div class="kpi-icon"><i data-feather="trending-down"></i></div>
+            <div class="kpi-content">
+                <h3>Total Expenses</h3>
+                <p id="kpi-expenses" class="amount">$0.00</p>
+            </div>
+        </div>
+        <div class="card glass-panel kpi-card">
+            <div class="kpi-icon"><i data-feather="briefcase"></i></div>
+            <div class="kpi-content">
+                <h3>Net Savings</h3>
+                <p id="kpi-savings" class="amount">$0.00</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Charts Section -->
+    <div class="charts-section">
+        <div class="card glass-panel chart-container">
+            <h3>Monthly Spending Trend</h3>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        <div class="side-panel">
+            <div class="card glass-panel ai-predict-card">
+                <div class="ai-header">
+                    <i data-feather="cpu" class="ai-icon"></i>
+                    <h3>AI Forecast</h3>
+                </div>
+                <p class="ai-desc">Based on your historical spending, we predict your next month's expenses will be:</p>
+                <div class="prediction-amount">
+                    <span id="ai-prediction">$0.00</span>
+                </div>
+                <p class="ai-footer">Model: Linear Regression</p>
+            </div>
+            <div class="card glass-panel chart-container mt-2">
+                <h3>Expenses by Category</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Budget Alerts -->
+    <div class="alerts-section mt-4">
+        <h3>Budget Alerts</h3>
+        <div id="alerts-container" class="alerts-container">
+            <p class="no-data">No alerts. You are within your budget!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

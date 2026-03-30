@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Budget - FinTracker{% endblock %}
+{% block page_title %}Budget Management{% endblock %}
+
+{% block content %}
+<div class="split-view">
+    <!-- Form Side -->
+    <div class="form-section card glass-panel">
+        <h3><i data-feather="target"></i> Set Monthly Target</h3>
+        <p class="desc-text">Define maximum spending limits for each category to keep track of your goals.</p>
+        <form id="budget-form" class="app-form">
+            <div class="input-group">
+                <label>Category</label>
+                <select id="bud-category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Food & Dining">Food & Dining</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Bills & Utilities">Bills & Utilities</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Monthly Limit ($)</label>
+                <input type="number" step="1" id="bud-limit" required placeholder="500">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">Set Budget</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Data Side -->
+    <div class="data-section card glass-panel">
+        <h3><i data-feather="list"></i> Active Budgets</h3>
+        <div class="budget-list" id="budget-list">
+            <!-- Dynamic rows -->
+            <p class="no-data hidden">No active budget limits set.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/budget.js') }}"></script>
+{% endblock %}
